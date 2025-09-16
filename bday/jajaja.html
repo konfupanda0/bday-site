@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Happy Birthday Twin!</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(270deg, #ffdee9, #b5fffc, #ffe6fa, #e6f0ff);
+      background-size: 600% 600%;
+      animation: gradientShift 20s ease infinite;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    @keyframes gradientShift {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    h1 {
+      font-size: 4em;
+      background: linear-gradient(90deg, #ff0080, #ff85a2, #ffccff, #ff0080);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 300% auto;
+      animation: glowText 6s linear infinite, fadeIn 2s ease forwards;
+      margin: 20px 0 0 0;
+      z-index: 2;
+      opacity: 0;
+    }
+
+    h2 {
+      font-size: 2em;
+      color: #a61e4d;
+      animation: fadeIn 3s ease forwards;
+      animation-delay: 2s;
+      margin-top: 10px;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes glowText {
+      to { background-position: 200% center; }
+    }
+
+    /* Cherry blossoms */
+    .petal {
+      position: absolute;
+      top: -10vh;
+      width: 30px;
+      height: 30px;
+      background-image: url('images/bday_petal.png'); /* ✅ fixed (removed /) */
+      background-size: cover;
+      opacity: 0.9;
+      animation: fall linear infinite, sway 4s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    @keyframes fall {
+      to { transform: translateY(110vh) rotate(720deg); }
+    }
+    @keyframes sway {
+      from { transform: translateX(-20px); }
+      to { transform: translateX(20px); }
+    }
+
+    /* Small falling flowers (confetti style) */
+    .flower-confetti {
+      position: absolute;
+      top: -10vh;
+      width: 20px;
+      height: 20px;
+      background-image: url('bday_petal.png'); 
+      background-size: cover;
+      opacity: 0.8;
+      animation: fallFlower linear infinite, swayFlower 6s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    @keyframes fallFlower {
+      to { transform: translateY(110vh) rotate(360deg); }
+    }
+    @keyframes swayFlower {
+      from { transform: translateX(-40px); }
+      to { transform: translateX(40px); }
+    }
+
+    /* Fireworks */
+    .firework {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: white;
+      pointer-events: none;
+    }
+  </style>
+  <!-- Birthday text -->
+  <h1>Happy Birthday, Bence!</h1>
+  <h2>Wishing you the best day ever 🎂</h2>
+
+  <script>
+    function createPetal() {
+      const petal = document.createElement('div'); 
+      petal.classList.add('petal'); 
+      document.body.appendChild(petal); 
+
+      petal.style.left = Math.random() * 100 + 'vw';
+
+      const size = Math.random() * 20 + 20;
+      petal.style.width = size + 'px';
+      petal.style.height = size + 'px';
+
+      const duration = Math.random() * 5 + 5;
+      petal.style.animationDuration = duration + 's';
+
+      setTimeout(() => {
+        petal.remove();
+      }, duration * 1000);
+    }
+
+    
+    setInterval(createPetal, 250);
+
+    // Fireworks on click
+    document.body.addEventListener("click", e => {
+      const colors = ["#ff4d6d", "#ffd60a", "#4cc9f0", "#9d4edd", "#ffffff"];
+      for (let i=0; i<30; i++) {
+        const fw = document.createElement("div");
+        fw.classList.add("firework");
+        document.body.appendChild(fw);
+        const x = e.clientX, y = e.clientY;
+        fw.style.left = x + "px";
+        fw.style.top = y + "px";
+        fw.style.background = colors[Math.floor(Math.random() * colors.length)];
+        const angle = Math.random() * 2 * Math.PI;
+        const radius = Math.random() * 150;
+        const dx = Math.cos(angle) * radius;
+        const dy = Math.sin(angle) * radius;
+        fw.animate([
+          { transform: `translate(0,0) scale(1)`, opacity: 1 },
+          { transform: `translate(${dx}px,${dy}px) scale(0.5)`, opacity: 0 }
+        ], { duration: 1500, easing: "ease-out" });
+        setTimeout(() => fw.remove(), 1500);
+      }
+    });
+
+    // Background music (click to start if blocked)
+    const audio = new Audio("NATLOVE.mp3"); // put your music file in same folder
+    audio.loop = true;
+    audio.volume = 0.5;
+    audio.play().catch(() => {
+      document.body.addEventListener("click", () => audio.play(), { once: true });
+    });
+  </script>
+
+</html>
